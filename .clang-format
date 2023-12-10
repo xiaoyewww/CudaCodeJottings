@@ -24,6 +24,4 @@ Standard:  Cpp11
 AllowAllParametersOfDeclarationOnNextLine: true
 BinPackParameters: false
 BinPackArguments: false
-IncludeBlocks: Preserve
-IncludeIsMainSourceRegex: (\.cu)$
 ...
