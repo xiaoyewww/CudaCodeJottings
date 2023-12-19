@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "profiler/profiler.h"
+
 #define CUDA_CHECK(status)                                                     \
   do {                                                                         \
     auto ret = (status);                                                       \
@@ -61,8 +63,8 @@ int main() {
   std::cout << "每个SM的最大线程束数: "
             << devProp.maxThreadsPerMultiProcessor / 32 << std::endl;
 
-  constexpr int kCols = 1 << 6;
-  constexpr int kRows = 1 << 4;
+  constexpr int kCols = 1 << 16;
+  constexpr int kRows = 1 << 12;
   constexpr int kNums = kCols * kRows;
   constexpr int nBytes = kCols * kRows * sizeof(float);
   // malloc host memory
@@ -72,11 +74,7 @@ int main() {
   z = (float *)malloc(nBytes);
   z_res = (float *)malloc(nBytes);
 
-  for (int i = 0; i < kNums; ++i) {
-    x[i] = i;
-    y[i] = i;
-    z_res[i] = x[i] + y[i];
-  }
+  PROFILER_FUNC(AddCpu, x, y, z_res, kNums);
 
   // malloc device memory
   float *d_x, *d_y, *d_z;
@@ -89,13 +87,22 @@ int main() {
       cudaMemcpy((void *)d_y, (void *)y, nBytes, cudaMemcpyHostToDevice));
 
   // block size and grid size
-  dim3 block(4, 2);
-  dim3 grid((kCols + block.x - 1) / block.x, (kRows + block.y - 1) / block.y);
+  const unsigned int block_x = 1024;
+  const unsigned int block_y = 1024;
+  dim3 block(block_x, block_y);
+  std::cout << "block: " << block.x << "," << block.y << std::endl;
+
+  const unsigned int grid_x = (kCols + block.x - 1) / block.x;
+  const unsigned int grid_y = (kRows + block.y - 1) / block.y;
+  dim3 grid(grid_x, grid_y);
+  std::cout << "grid: " << grid.x << "," << grid.y << std::endl;
   // std::cout << "kCols:" << kCols << std::endl;
   // std::cout << "kRows:" << kRows << std::endl;
   // std::cout << "grid:" << grid.x << " " << grid.y << std::endl;
   // compute
-  AddCuda<<<grid, block>>>(d_x, d_y, d_z, kCols, kRows);
+  // AddCuda<<<grid, block>>>(d_x, d_y, d_z, kCols, kRows);
+
+  PROFILER_CUDA_FUNC(AddCuda, grid, block, d_x, d_y, d_z, kCols, kRows);
   cudaDeviceSynchronize();
   // if no this line ,it can not output hello world from gpu
   // but it will reset the device memory
