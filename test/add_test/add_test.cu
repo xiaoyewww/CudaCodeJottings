@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "profiler/profiler.h"
+#include "all_in_one.h"
 
 #define CUDA_CHECK(status)                                                     \
   do {                                                                         \
@@ -14,33 +14,6 @@
                                __FILE__ + ":" + std::to_string(__LINE__));     \
     }                                                                          \
   } while (0)
-
-// no check for indices
-__global__ void AddCuda(
-    const float *x, const float *y, float *z, const int nx, const int ny) {
-  int ix = threadIdx.x + blockDim.x * blockIdx.x;
-  int iy = threadIdx.y + blockDim.y * blockIdx.y;
-  int idx = ix + iy * nx;
-  // printf(
-  //     "nx: %d, ny: %d, block dim(%d, %d)\n block id(%d, %d), thread id(%d, "
-  //     "%d)\nixy(%d, %d), "
-  //     "idx: %d \n",
-  //     nx,
-  //     ny,
-  //     blockDim.x,
-  //     blockDim.y,
-  //     blockIdx.x,
-  //     blockIdx.y,
-  //     threadIdx.x,
-  //     threadIdx.y,
-  //     ix,
-  //     iy,
-  //     idx);
-  if (ix < nx && iy < ny) {
-    z[idx] = x[idx] + y[idx];
-    // printf("idx %d is ready: %f, %f, %f\n", idx, z[idx], x[idx], y[idx]);
-  }
-}
 
 void AddCpu(const float *x, const float *y, float *z, const int n) {
   for (int i = 0; i < n; ++i) {
@@ -102,7 +75,8 @@ int main() {
   // compute
   // AddCuda<<<grid, block>>>(d_x, d_y, d_z, kCols, kRows);
 
-  PROFILER_CUDA_FUNC(AddCuda, grid, block, d_x, d_y, d_z, kCols, kRows);
+  PROFILER_CUDA_FUNC(
+      jottings::AddCuda, grid, block, d_x, d_y, d_z, kCols, kRows);
   cudaDeviceSynchronize();
   // if no this line ,it can not output hello world from gpu
   // but it will reset the device memory

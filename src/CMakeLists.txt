@@ -1,5 +1,10 @@
 add_subdirectory(profiler)
 
-# add_library(cusdk SHARED)
+set(KERNEL_SRC ${CMAKE_CURRENT_SOURCE_DIR}/kernel/add.cu)
 
-# target_link_libraries(cusdk profiler)
+add_library(jotting-sdk SHARED ${KERNEL_SRC})
+
+target_link_libraries(
+    jotting-sdk PRIVATE
+    profiler
+)

@@ -16,6 +16,5 @@ endif()
 add_subdirectory(src)
 
 if(WITH_TEST)
-    enable_testing()
     add_subdirectory(test)
 endif()
