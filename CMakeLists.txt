@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD 17)
 option(WITH_TEST "whether to build with unittest" ON)
 option(WITH_PROFILER "whether to build with profiler" ON)
 
+if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+    set(CMAKE_CUDA_ARCHITECTURES 70 75 80)
+endif(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+
 enable_language(CUDA)
 find_package(CUDA)
 
@@ -30,5 +34,6 @@ endif()
 add_subdirectory(src)
 
 if(WITH_TEST)
+    enable_testing()
     add_subdirectory(test)
 endif()
