@@ -387,9 +387,11 @@ inline char *sdkFindFilePath(const char *filename,
       "../../../Common/data/",     // up 3 in tree
       "../../Common/data/"         // up 2 in tree
 
-      "../../../../test/data/",  // up 4 in tree
-      "../../../test/data/",     // up 3 in tree
-      "../../test/data/",        // up 2 in tree
+      "../../../../../../test/data/",  // up 4 in tree
+      "../../../../../test/data/",     // up 4 in tree
+      "../../../../test/data/",        // up 4 in tree
+      "../../../test/data/",           // up 3 in tree
+      "../../test/data/",              // up 2 in tree
   };
 
   // Extract the executable name
