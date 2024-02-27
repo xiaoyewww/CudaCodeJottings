@@ -14,6 +14,7 @@ endif(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
 enable_language(CUDA)
 find_package(CUDA)
 
+# all cuda libraries can be found in https://cmake.org/cmake/help/latest/module/FindCUDA.html.
 message(INFO "CUDA_cublas_LIBRARY: ${CUDA_cublas_LIBRARY}")
 message(INFO "CUDA_cusparse_LIBRARY: ${CUDA_cusparse_LIBRARY}")
 
