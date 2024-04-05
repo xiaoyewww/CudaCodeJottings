@@ -15,8 +15,15 @@ enable_language(CUDA)
 find_package(CUDA)
 
 # all cuda libraries can be found in https://cmake.org/cmake/help/latest/module/FindCUDA.html.
-message(INFO "CUDA_cublas_LIBRARY: ${CUDA_cublas_LIBRARY}")
-message(INFO "CUDA_cusparse_LIBRARY: ${CUDA_cusparse_LIBRARY}")
+message(STATUS "CUDA_INCLUDE_DIRS: ${CUDA_INCLUDE_DIRS}")
+message(STATUS "CUDA_TOOLKIT_ROOT_DIR: ${CUDA_TOOLKIT_ROOT_DIR}")
+message(STATUS "CUDA_cublas_LIBRARY: ${CUDA_cublas_LIBRARY}")
+message(STATUS "CUDA_cusparse_LIBRARY: ${CUDA_cusparse_LIBRARY}")
+
+# get all cuda libs
+# set(CUDA_LIB_DIR ${CUDA_TOOLKIT_ROOT_DIR}/lib64)
+# file(GLOB_RECURSE CUDA_ALL_LIBS ${CUDA_LIB_DIR}/*.so)
+# message(STATUS "CUDA_ALL_LIBS: ${CUDA_ALL_LIBS}")
 
 find_package(OpenMP REQUIRED)
 if(OpenMP_FOUND)
