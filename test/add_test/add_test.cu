@@ -36,8 +36,8 @@ int main() {
   std::cout << "每个SM的最大线程束数: "
             << devProp.maxThreadsPerMultiProcessor / 32 << std::endl;
 
-  constexpr int kCols = 1 << 16;
-  constexpr int kRows = 1 << 12;
+  constexpr int kCols = 1 << 12;
+  constexpr int kRows = 1 << 8;
   constexpr int kNums = kCols * kRows;
   constexpr int nBytes = kCols * kRows * sizeof(float);
   // malloc host memory
