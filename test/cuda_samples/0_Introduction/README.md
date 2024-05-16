@@ -65,3 +65,7 @@ cuda实现矩阵乘。
 这段代码是一个 CUDA 示例程序，用于展示如何使用 CUDA 的 Arrive-Wait Barrier (AWBarrier) 来进行向量归一化操作。归一化过程通过计算两个向量的点积，并利用该点积的平方根来归一化这两个向量。
 
 这段代码在我的环境无法编译，在cuda论坛上同样也看到这个[BUG](https://forums.developer.nvidia.com/t/cuda-12-1-error-when-building-cuda-samples/246465)了，看上去是编译器支持的问题，不知道后面是不是会修复，暂时移除测试。
+
+## simple_assert
+
+在cuda函数中实现assert。
