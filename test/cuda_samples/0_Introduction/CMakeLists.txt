@@ -8,7 +8,7 @@ add_subdirectory(cpp_overload)
 add_subdirectory(cuda_openmp)
 add_subdirectory(fp16_scalar_product)
 add_subdirectory(matrix_mul)
-add_subdirectory(matrix_mul_driver)
+# add_subdirectory(matrix_mul_driver) # build error in cuda 12.0
 add_subdirectory(simple_assert)
 
 # the sample of cannot compile in my env, casue by:
