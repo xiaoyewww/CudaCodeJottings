@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
-project(CUDA_CODE_JOTTINGS LANGUAGES C CXX CUDA)
+project(jotting-sdk LANGUAGES C CXX CUDA)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -8,14 +8,20 @@ option(WITH_TEST "whether to build with unittest" ON)
 option(WITH_PROFILER "whether to build with profiler" ON)
 
 if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-    set(CMAKE_CUDA_ARCHITECTURES 70 75 80)
+    set(CMAKE_CUDA_ARCHITECTURES 61 70 75 80)
 endif(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+message(STATUS "CMAKE_CUDA_ARCHITECTURES: ${CMAKE_CUDA_ARCHITECTURES}")
 
 enable_language(CUDA)
-find_package(CUDA)
 
-# all cuda libraries can be found in https://cmake.org/cmake/help/latest/module/FindCUDA.html.
-message(STATUS "CUDA_INCLUDE_DIRS: ${CUDA_INCLUDE_DIRS}")
+# if use old way, the variables can be found in https://cmake.org/cmake/help/latest/module/FindCUDA.html.
+# find_package(CUDA)
+
+# new in cmake 3.17
+find_package(CUDAToolkit REQUIRED)
+
+# all cuda libraries can be found in https://cmake.org/cmake/help/latest/module/FindCUDAToolkit.html#result-variables.
+message(STATUS "CUDA_INCLUDE_DIRS: ${CUDAToolkit_INCLUDE_DIRS}")
 message(STATUS "CUDA_TOOLKIT_ROOT_DIR: ${CUDA_TOOLKIT_ROOT_DIR}")
 message(STATUS "CUDA_cublas_LIBRARY: ${CUDA_cublas_LIBRARY}")
 message(STATUS "CUDA_cusparse_LIBRARY: ${CUDA_cusparse_LIBRARY}")
