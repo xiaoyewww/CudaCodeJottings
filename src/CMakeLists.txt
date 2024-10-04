@@ -1,6 +1,6 @@
 add_subdirectory(profiler)
 
-set(KERNEL_SRC  ${CMAKE_CURRENT_SOURCE_DIR}/kernel/add.cu
+set(KERNEL_SRC  ${CMAKE_CURRENT_SOURCE_DIR}/kernel/add.cpp
                 ${CMAKE_CURRENT_SOURCE_DIR}/kernel/softmax.cpp
 )
 

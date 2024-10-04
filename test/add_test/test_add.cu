@@ -47,6 +47,11 @@ int main() {
   z = (float *)malloc(nBytes);
   z_res = (float *)malloc(nBytes);
 
+  for (int i = 0; i < kNums; ++i) {
+    x[i] = static_cast<float>(i);
+    y[i] = static_cast<float>(i);
+  }
+
   PROFILER_FUNC(AddCpu, x, y, z_res, kNums);
 
   // malloc device memory
@@ -59,24 +64,8 @@ int main() {
   CUDA_CHECK(
       cudaMemcpy((void *)d_y, (void *)y, nBytes, cudaMemcpyHostToDevice));
 
-  // block size and grid size
-  const unsigned int block_x = 1024;
-  const unsigned int block_y = 1024;
-  dim3 block(block_x, block_y);
-  std::cout << "block: " << block.x << "," << block.y << std::endl;
-
-  const unsigned int grid_x = (kCols + block.x - 1) / block.x;
-  const unsigned int grid_y = (kRows + block.y - 1) / block.y;
-  dim3 grid(grid_x, grid_y);
-  std::cout << "grid: " << grid.x << "," << grid.y << std::endl;
-  // std::cout << "kCols:" << kCols << std::endl;
-  // std::cout << "kRows:" << kRows << std::endl;
-  // std::cout << "grid:" << grid.x << " " << grid.y << std::endl;
-  // compute
-  // AddCuda<<<grid, block>>>(d_x, d_y, d_z, kCols, kRows);
-
-  PROFILER_CUDA_FUNC(
-      jottings::AddCuda, grid, block, d_x, d_y, d_z, kCols, kRows);
+  PROFILER_FUNC(
+      jottings::AddCuda, d_x, d_y, d_z, kCols, kRows);
   cudaDeviceSynchronize();
   // if no this line ,it can not output hello world from gpu
   // but it will reset the device memory
@@ -86,12 +75,12 @@ int main() {
 
   // check
   float max_error = 0.0;
-  for (int i = 0; i < kNums; ++i) {
-    // if (fabs(z[i] - z_res[i]) > 1) {
-    //   std::cout << "z[i]: " << z[i] << std::endl;
-    //   std::cout << "z_res[i]: " << z_res[i] << std::endl;
-    //   std::cout << i << std::endl;
-    // }
+  for (int i = 0; i < 10; ++i) {
+    if (fabs(z[i] - z_res[i]) > 1) {
+      std::cout << "z[i]: " << z[i] << std::endl;
+      std::cout << "z_res[i]: " << z_res[i] << std::endl;
+      std::cout << i << std::endl;
+    }
     max_error = fmax(max_error, fabs(z[i] - z_res[i]));
   }
   std::cout << "max_error is: " << max_error << std::endl;
